@@ -1,0 +1,65 @@
+@use '~@fremtind/jkl-core/variables/_all.scss' as var;
+@use "~@fremtind/jkl-core/mixins/_helpers.scss" as helpers;
+@use "~@fremtind/jkl-core/mixins/_all.scss" as mix;
+@use "~@fremtind/jkl-core/_functions.scss" as fun;
+@use '~@fremtind/jkl-core/jkl';
+
+$arrow-height: fun.rem(16px);
+$arrow-width: fun.rem(13px);
+
+
+
+@mixin _expanded-arrow($px) {
+    .jkl-expand-button__arrow {
+        transform: translateY(fun.rem($px));
+    }
+}
+
+.jkl-expand-button {
+    @include helpers.reset-outline;
+    @include jkl.text-style("body");
+    
+    cursor: pointer;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: fun.rem(10px);
+    background: none;
+
+    &:hover {
+        @include _expanded-arrow(3px);
+    }
+    
+    &--expanded {
+        @include helpers.no-grow-bold();
+        font-weight: bold;
+        @include _expanded-arrow(3px);
+
+        &:hover {
+            @include _expanded-arrow(0px);
+        }
+    }
+
+    &--compact {
+        @include jkl.text-style("small");
+
+        // Fix this..
+        .jkl-expand-button__arrow {
+            --jkl-icon-width: #{$arrow-width};
+            .jkl-icon--small {
+                --jkl-icon-width: #{$arrow-width};
+            }
+        }
+    }
+
+    &__arrow {
+        @include mix.motion("standard");
+        position: relative;
+
+        // Fix this..
+        --jkl-icon-width: #{$arrow-width};
+        .jkl-icon--small {
+            --jkl-icon-width: #{$arrow-width};
+        }
+    }
+}

@@ -4,7 +4,6 @@
 @import "~@fremtind/jkl-core/_functions.scss";
 
 $jkl-slider-offset: 3px;
-$jkl-slider-width: 170px;
 $jkl-slider-offset__pill--left: calc(#{$jkl-slider-offset} + 1px);
 $jkl-slider-offset__pill--right: calc(calc(#{$jkl-slider-width}/ 2) - #{$jkl-slider-offset});
 $jkl-slider-rounded: rem(100px);
@@ -57,8 +56,6 @@ $jkl-slider-focus-ring-width: rem(2px);
         overflow: hidden;
         display: flex;
         justify-content: space-between;
-        max-width: $jkl-slider-width;
-        width: 100%;
         user-select: none;
 
         &__pill {
