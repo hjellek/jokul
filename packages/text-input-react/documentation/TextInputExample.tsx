@@ -4,9 +4,25 @@ import { LabelVariant } from "@fremtind/jkl-core";
 import { TextInput } from "../src";
 import { Action } from "../src/TextInput";
 
+// import { formatValuta } from "../../formatters-util/src/valuta/formatValuta";
+// import { formatKortnummer } from "../../formatters-util/src/kortnummer/formatKortnummer";
+// import { formatKontonummer } from "../../formatters-util/src/kontonummer/formatKontonummer";
+// import { formatTelefonnummer } from "../../formatters-util/src/telefonnummer/formatTelefonnummer";
+import { formatFodselsnummer } from "../../formatters-util/src/fodselsnummer/formatFodselsnummer";
+
+const format = (value: string) => {
+    // return formatValuta(value);
+    // return formatKortnummer(value, { partial: true });
+    // return formatKontonummer(value, { partial: true, separator: "." });
+    // return formatTelefonnummer(value, { partial: true });
+    return formatFodselsnummer(value, { partial: true });
+};
+
 export const TextInputExample: VFC<ExampleComponentProps> = ({ choiceValues, boolValues }) => {
     const [value, setValue] = useState("");
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => setValue(e.target.value);
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setValue(format(e.target.value));
+    };
 
     const helpLabel = boolValues?.["Med hjelpetekst"] ? "Fødselsnummer består av 11 siffer" : undefined;
     const errorLabel = boolValues?.["Med feil"] ? "Du må fylle ut fødselsnummer, 11 siffer." : undefined;
