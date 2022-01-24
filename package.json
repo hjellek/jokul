@@ -3,14 +3,14 @@
     "private": true,
     "version": "1.0.0",
     "scripts": {
-        "clean": "lerna run --parallel clean && rimraf node_modules/",
-        "clean:portal": "lerna run clean:portal --stream",
-        "build": "yarn patch-package && lerna run --ignore @fremtind/browserslist-config-jkl --ignore @fremtind/portal build --stream",
-        "build:quiet": "yarn patch-package && lerna run --ignore @fremtind/browserslist-config-jkl --ignore @fremtind/portal build",
-        "build:style": "lerna run --ignore @fremtind/*-react --ignore @fremtind/*-util --ignore @fremtind/portal --ignore @fremtind/jkl-react-hooks build",
-        "build:scripts": "lerna run --ignore @fremtind/browserslist-config-jkl --ignore @fremtind/portal --ignore '@fremtind/!(*-react)' build:scripts --stream",
-        "build:types": "lerna run --ignore @fremtind/browserslist-config-jkl --ignore @fremtind/portal --ignore '@fremtind/!(*-react)' build:types --stream",
-        "build:docs": "lerna run --scope @fremtind/portal build --stream",
+        "clean": "turbo run clean && rimraf node_modules/",
+        "clean:portal": "turbo run clean:portal",
+        "build": "yarn patch-package && turbo run build --ignore=\"@fremtind/browserslist-config-jkl\" --ignore=\"@fremtind/portal\" --cache-dir=\"node_modules/.cache/turbo\"",
+        "build:quiet": "yarn patch-package && turbo run build --ignore=\"@fremtind/browserslist-config-jkl\" --ignore=\"@fremtind/portal\" --cache-dir=\"node_modules/.cache/turbo\"",
+        "build:style": "turbo run build --ignore=\"@fremtind/*-react\" --ignore=\"@fremtind/*-util\" --ignore=\"@fremtind/portal\" --ignore=\"@fremtind/jkl-react-hooks\" --cache-dir=\"node_modules/.cache/turbo\"",
+        "build:scripts": "turbo run build:scripts --ignore=\"@fremtind/browserslist-config-jkl\" --ignore=\"@fremtind/portal\" --ignore=\"@fremtind/!(*-react)\" --cache-dir=\"node_modules/.cache/turbo\"",
+        "build:types": "turbo run build:types --ignore=\"@fremtind/browserslist-config-jkl\" --ignore=\"@fremtind/portal\" --ignore=\"@fremtind/!(*-react)\" --cache-dir=\"node_modules/.cache/turbo\"",
+        "build:docs": "turbo run build --scope=@fremtind/portal --cache-dir=\"node_modules/.cache/turbo\"",
         "commit": "git-cz",
         "predeploy:docs": "yarn run build:docs",
         "deploy:docs": "gh-pages -d portal/public",
@@ -31,11 +31,11 @@
         "prerelease": "yarn build",
         "release": "lerna publish",
         "release-gh": "lerna publish from-package",
-        "dev": "lerna run --scope @fremtind/portal dev --stream",
+        "dev": "turbo run dev --scope=@fremtind/portal",
         "start": "yarn run dev",
-        "serve": "lerna run build:test --stream",
-        "server": "lerna run --scope @fremtind/portal serve --stream",
-        "boot": "yarn install --force && yarn build",
+        "serve": "turbo run build:test",
+        "server": "turbo run serve --scope=@fremtind/portal",
+        "boot": "yarn install --force && yarn build --force",
         "reboot": "yarn clean && yarn boot",
         "prepare": "husky install",
         "scaffold": "node './scripts/scaffold'"
@@ -122,6 +122,7 @@
         "rollup": "^2.64.0",
         "sass": "^1.48.0",
         "stylelint": "^14.1.0",
+        "turbo": "^1.0.28",
         "typescript": "^4.5.4"
     },
     "browserslist": [
@@ -131,6 +132,39 @@
         "packages/*",
         "portal"
     ],
+    "turbo": {
+        "baseBranch": "origin/main",
+        "pipeline": {
+            "clean": {
+                "outputs": []
+            },
+            "build": {
+                "dependsOn": [
+                    "^build"
+                ],
+                "outputs": [
+                    "build/**",
+                    "*.css"
+                ]
+            },
+            "test": {
+                "outputs": []
+            },
+            "lint": {
+                "outputs": []
+            },
+            "dev": {
+                "cache": false
+            }
+        },
+        "globalDependencies": [
+            "yarn.lock",
+            "gulpfile.js",
+            "rollup.config.js",
+            "tsconfig-for-declarations.json",
+            "tsconfig.json"
+        ]
+    },
     "config": {
         "commitizen": {
             "path": "./node_modules/cz-lerna-changelog"
